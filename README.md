@@ -1,2 +1,5 @@
 # web-330
-Enterprise JavaScript II assignment log
+# WEB 330 Enterprise JavaScript II
+## Contributors
+* Tiffany Reyes
+* Peter Itskovich
