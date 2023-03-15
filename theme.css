@@ -1,0 +1,98 @@
+body {
+    font-family: 'Oswald', Verdana, Arial, sans-serif;
+}
+
+body.light-theme {
+    --text-color: #000;
+    --background-color: #FFF;
+    --anchor-color: #4F3674;
+    --h1-background-color: #3C275A;
+    --h1-border-color: #D6A800;
+    --heading-background-color: #3C275A;
+    --heading-color: #FFF;
+    --heading-border-color: #D6A800;
+    --anchor-hover-color: #4F3674;
+    --anchor-hover-background-color: #D6A800;
+    --card-background-color: #FFF;
+    --card-title-color: #4F3674;
+    --btn-background-color: #4F3674;
+    --btn-color: #FFF;
+    --btn-hover-background-color: #D6A800;
+    --btn-hover-color: #4F3674;
+    --input-border-color: #CCC;
+}
+
+body.dark-theme {
+    --text-color: #FAFAFA;
+    --background-color: #303030;
+    --anchor-color: #FFF;
+    --h1-background-color: #9C27B0;
+    --h1-border-color: #9C27B0;
+    --heading-background-color: #424242;
+    --heading-color: #FFF;
+    --heading-border-color: #424242;
+    --anchor-hover-color: #D176E1;
+    --anchor-hover-background-color: #303030;
+    --card-background-color: #424242;
+    --card-title-color: #D176E1;
+    --btn-background-color: #D176E1;
+    --btn-color: #FFF;
+    --btn-hover-background-color: #7D4787;
+    --btn-hover-color: #FFF;
+    --input-border-color: #303030;
+}
+
+body {
+    color: var(--text-color);
+    background: var(--background-color);
+}
+
+a {
+    color: var(--anchor-color);
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: var(--anchor-hover-background-color);
+    color: var(--anchor-hover-color);
+}
+
+h1 {
+    color: var(--heading-color);
+    background-color: var(--heading-background-color);
+    padding: 10px;
+    border: 1px solid var(--h1-border-color);
+}
+
+h2, h3, h4 {
+    color: var(--heading-color);
+    background-color: var(--heading-background-color);
+    padding: 10px;
+    border: 1px solid var(--h1-border-color);
+}
+
+.card {
+    background-color: var(--card-background-color);
+}
+
+.card-title {
+    color: var(--card-title-color);
+}
+
+.btn-primary {
+    background-color: var(--btn-background-color);
+    color: var(--btn-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--btn-hover-background-color);
+    color: var(--btn-hover-color);
+}
+
+.input {
+    border-color: var(--input-border-color);
+}
+
+.drop-down-menu {
+    border-color: var(--input-border-color);
+}
