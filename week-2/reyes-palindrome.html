@@ -1,0 +1,72 @@
+<!--========================== Exercise 2.2 - Palindrome App ==========================
+An HTML and JavaScript project.
+
+Code referenced from w3schools 
+- https://www.w3schools.com/jsref/jsref_reverse.asp
+- https://www.w3schools.com/jsref/jsref_length_array.asp -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WEB 330 - Enterprise JavaScript II</title>
+    <link href="../site.css" type="text/css" rel="stylesheet">
+    <link href="../theme.css" type="text/css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="light-theme">
+    <h1 class="app-header">Welcome to the Palindrome App!</h1>
+    <div class="card">
+        <div class="card-title">Palindrome Checker</div>
+        <p class="form-field">
+            <label>Phrase value:</label>
+            <input id="txtPhrase" class="form-field-input" type="text">
+        </p>
+        <button id="btnCheckPhrase" class="btn-primary">Check Phrase</button>
+    </div>
+    <div class="link-card"><a href="../index.html" class="return-home">Return</a></div>
+    <br>
+    <div class="card">
+        <div class="card-title">Palindrome Results</div>
+        <div id="assign-results-header"></div>
+        <div id="assign-results" class="assign-results-text"></div>
+    </div>
+    <script>
+        function getTodaysDate() {
+            return new Date().toLocaleDateString("en-US");
+        }
+
+        function getLength(string) {
+            return string.length;
+        }
+
+        function reverse(string) {
+            const arrayValues = string.split('');
+            const reverseArrayValues = arrayValues.reverse();
+            const reverseString = reverseArrayValues.join('');
+            return reverseString;
+        }
+
+        function isPalindrome(string) {
+            const reverseString = reverse(string);
+
+            return string == reverseString
+        }
+
+        document.getElementById("btnCheckPhrase").onclick = function() {
+            const txtPhrase = document.getElementById("txtPhrase").value
+            const assignResults = document.getElementById("assign-results");
+            const today = getTodaysDate();
+            const len = getLength(txtPhrase);
+            const reversedPhrase = reverse(txtPhrase);
+            const header = `Date: ${today}<br>Original Phrase: ${txtPhrase}<br>Reversed Phrase: ${reversedPhrase}<br>Phrase Length: ${len}`;
+            document.getElementById("assign-results-header").innerHTML = header;
+
+            if (isPalindrome(txtPhrase.toLowerCase())) {
+                assignResults.innerHTML = `${txtPhrase} <b><u>is</u></b> a palindrome!`;
+            }
+            else {
+                assignResults.innerHTML = `${txtPhrase} <b><u>is not</u></b> a palindrome!`;
+            }
+        }
+    </script>
+</body>
+</html>

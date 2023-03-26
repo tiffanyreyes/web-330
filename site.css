@@ -1,3 +1,7 @@
+body {
+    font-size: 20px;
+}
+
 #container {
     margin-top: 50px;
     margin-left: 100px;
@@ -55,6 +59,7 @@
     border: none;
     color: inherit;
     background-color: inherit;
+    font-size: 28px;
 }
 
 .form {
@@ -66,6 +71,38 @@
     padding: 20px;
 }
 
+.form-field-input {
+    height: 32px;
+    font-size: 20px;
+}
+
 .full-width {
     width: 100%;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: auto;
+    width: 700px;
+    padding: 20px;
+}
+
+.link-card {
+    margin: auto;
+    width: 740px;
+    padding: 20px;
+}
+
+.card-title {
+    text-align: center;
+    font-size: 28px;
+}
+
+button {
+    border: none;
+    padding: 15px 64px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
 }
