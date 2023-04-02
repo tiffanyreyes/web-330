@@ -1,0 +1,8 @@
+.menu-card-container {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.menu-card {
+    margin: 10px;
+}

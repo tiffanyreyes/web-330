@@ -82,14 +82,12 @@ body {
 
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    margin: auto;
-    width: 700px;
+    margin: 40px 100px;
     padding: 20px;
 }
 
 .link-card {
-    margin: auto;
-    width: 740px;
+    margin: 40px 80px;
     padding: 20px;
 }
 
