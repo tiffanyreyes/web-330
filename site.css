@@ -25,20 +25,6 @@ body {
     font-size: 1px;
 }
 
-.return-home {
-    color: #4F3674;
-    text-decoration: none;
-}
-
-.return-home:hover {
-    background-color: #D6A800;
-    color: #4F3674;
-}
-
-.return-home:visited {
-    color: #3C275A;
-}
-
 .assign-container {
     padding: 10px;
 }

@@ -1,0 +1,146 @@
+<!--========================== Exercise 4.2 - Calorie App ==========================
+An HTML and JavaScript project.
+
+Code referenced from w3schools 
+- https://www.w3schools.com/tags/att_input_type_checkbox.asp 
+- https://www.geeksforgeeks.org/how-to-create-static-variables-in-javascript/
+- https://www.w3schools.com/jsref/event_onkeyup.asp -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WEB 330 - Enterprise JavaScript II</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="../site.css" type="text/css" rel="stylesheet">
+    <link href="../theme.css" type="text/css" rel="stylesheet">
+    <link href="./reyes-calorie.css" type="text/css" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <script src="../theme.js"></script>
+</head>
+<body class="light-theme">
+    <i onclick="toggleMode(this)" id="icon-mode" class="fa fa-toggle-off pull-right" style="font-size: 28px;">
+        <span id="icon-text"></span>
+    </i>
+    <div class="clearfix">&nbsp;</div>
+
+    <div class="container">
+        <h1 class="app-header">Welcome to the Calorie App!</h1>
+        <div class="card">
+            <div class="card-title">Calorie Search Form</div>
+            <p class="form-field">
+                <label>Enter a food item:</label>
+                <input id="txtFoodItem" class="form-field-input" type="text">
+                <br>
+                <span id="foodList"></span>
+            </p>
+            <button id="btnSearch" class="btn-primary">Search</button>
+        </div>
+        <div class="link-card"><a href="../index.html">Return</a></div>
+        <div class="card">
+            <div class="card-title">Search Results</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Calories</th>
+                    </tr>
+                </thead>
+                <tbody id="searchResults">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { CalorieConverter } from "./calorie-converter.js";
+
+        const txtFoodItemEl = document.getElementById("txtFoodItem");
+
+        document.getElementById("btnSearch").onclick = function() {
+            const txtFoodItem = txtFoodItemEl.value;
+            const foods = CalorieConverter.find(txtFoodItem.toLowerCase());
+
+            let tableData = "";
+            for (const food of foods) {
+                tableData += "<tr><td>" + food.name + "</td><td>" + food.calories + "</td></tr>";
+            }
+            document.getElementById("searchResults").innerHTML = tableData;
+        }
+
+        document.getElementById("txtFoodItem").onkeyup = function(event){
+            if (event.key == 'Enter') {
+                document.getElementById("btnSearch").click();
+            }
+        }
+
+        const foodList = CalorieConverter.data;
+        let foodListData = "<i>(Ex: ";
+        for (const food of foodList) {
+            foodListData += food.name + ", ";
+        }
+        foodListData = foodListData.slice(0, -2);
+        foodListData += ")</i>";
+
+        document.getElementById("foodList").innerHTML = foodListData;
+
+    </script>
+
+    <script>
+        /**
+         * Set light theme as default if theme is not found in localStorage
+         */
+        setDefaultTheme();
+
+        /**
+         * Function to switch the users selected website theme
+         * @param x (this instance)
+         */
+        function toggleMode(x)
+        {
+            let colorTheme = document.body.classList; // get the body's CSS class
+            let iconMode = x.classList; // get the current classes assigned to the triggered button
+
+            /**
+             * If the current body class is set to the light-theme, update the user's preference to the dark-theme in the browsers
+             * local storage.
+             */
+            if (colorTheme.value === "light-theme")
+            {
+                localStorage.clear();
+                localStorage.setItem("mode", "dark-theme");
+                localStorage.setItem("iconMode", "fa-toggle-on");
+                localStorage.setItem("iconText", "Dark Mode");
+            }
+            /**
+             * If the current body class is set to the dark-theme, update the user's preference to the light-theme in the browsers
+             * local storage.
+             */
+            else
+            {
+                localStorage.clear();
+                localStorage.setItem("mode", "light-theme");
+                localStorage.setItem("iconMode", "fa-toggle-off");
+                localStorage.setItem("iconText", "Light Mode");
+            }
+
+            /**
+             * Apply the updated selection to the HTML page elements
+             */
+            colorTheme.value = localStorage.getItem("mode");
+            iconMode.value = `fa ${localStorage.getItem("iconMode")} pull-right`;
+            document.getElementById("icon-text").innerHTML = localStorage.getItem("iconText");
+        }
+
+        /**
+         * Function to clear the browsers localStorage and set the default theme to light-theme.
+         * This function is for demonstration purposes only and does not need to be included in any of your solutions.
+         */
+        function clearLocalStorage() {
+            localStorage.clear();
+            document.body.classList.value = "light-theme";
+            document.getElementById("icon-text").innerHTML = "Light Mode";
+            document.getElementById("icon-mode").classList.value = "fa fa-toggle-off pull-right";
+        }
+    </script>
+</body>
+</html>

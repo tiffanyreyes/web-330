@@ -6,6 +6,7 @@ body.light-theme {
     --text-color: #000;
     --background-color: #FFF;
     --anchor-color: #4F3674;
+    --anchor-visited-color: #3C275A;
     --h1-background-color: #3C275A;
     --h1-border-color: #D6A800;
     --heading-background-color: #3C275A;
@@ -20,12 +21,18 @@ body.light-theme {
     --btn-hover-background-color: #D6A800;
     --btn-hover-color: #4F3674;
     --input-border-color: #CCC;
+    --table-header-background-color: #4F3674;
+    --table-header-color: #FFF;
+    --table-border-color: #DDD;
+    --table-hover-background-color: #D6A800;
+    --table-hover-color: #4F3674;
 }
 
 body.dark-theme {
     --text-color: #FAFAFA;
     --background-color: #303030;
     --anchor-color: #FFF;
+    --anchor-visited-color: #9C27B0;
     --h1-background-color: #9C27B0;
     --h1-border-color: #9C27B0;
     --heading-background-color: #424242;
@@ -40,6 +47,11 @@ body.dark-theme {
     --btn-hover-background-color: #7D4787;
     --btn-hover-color: #FFF;
     --input-border-color: #303030;
+    --table-header-background-color: #D176E1;
+    --table-header-color: #FFF;
+    --table-border-color: #303030;
+    --table-hover-background-color: #7D4787;
+    --table-hover-color: #FFF;
 }
 
 body {
@@ -55,6 +67,10 @@ a {
 a:hover {
     background-color: var(--anchor-hover-background-color);
     color: var(--anchor-hover-color);
+}
+
+a:visited {
+    color: var(--anchor-visited-color);
 }
 
 h1 {
@@ -95,4 +111,29 @@ h2, h3, h4 {
 
 .drop-down-menu {
     border-color: var(--input-border-color);
+}
+
+table {
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    height: 28px;
+}
+
+table th {
+    background-color: var(--table-header-background-color);
+    color: var(--table-header-color);
+    padding: 12px;
+    text-align: left;
+}
+
+table td, th {
+    border: 1px solid var(--table-border-color);
+    padding-left: 12px;
+    text-align: left;
+}
+
+tr:hover {
+    background-color: var(--table-hover-background-color);
+    color: var(--table-hover-color);
+    cursor: pointer;
 }
