@@ -1,0 +1,157 @@
+<!--========================== Exercise 5.2 - Bobs Auto Repair ==========================
+An HTML and JavaScript project.
+
+Code referenced from w3schools 
+- https://www.w3schools.com/js/js_loop_forof.asp -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WEB 330 - Enterprise JavaScript II</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="../site.css" type="text/css" rel="stylesheet">
+    <link href="../theme.css" type="text/css" rel="stylesheet">
+    <link href="./reyes-bobs-auto-repair.css" type="text/css" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <script src="../theme.js"></script>
+    <script src="./cart-component.js"></script>
+</head>
+<body class="light-theme">
+    <i onclick="toggleMode(this)" id="icon-mode" class="fa fa-toggle-off pull-right" style="font-size: 28px;">
+        <span id="icon-text"></span>
+    </i>
+    <div class="clearfix">&nbsp;</div>
+
+    <div class="container">
+        <h1 class="app-header">Welcome to Bob's Automotive Repair Shop!</h1>
+        <div class="card">
+            <div class="card-title">Product Listing</div>
+            <cart-component></cart-component>
+            <p class="form-field">
+                <label>Choose a product:</label>
+                <select class="drop-down-menu" name="types" id="productList">
+                    <option value="select">--Select--</option>
+                    <option value="19.99">Oil Change</option>
+                    <option value="18.44">Filter Replacement</option>
+                    <option value="9.99">Wiper Fluid Refill</option>
+                </select>
+                <br>
+                <i id="cart-message">To view your shopping cart click on the cart icon</i>
+            </p>
+            <button id="btnAddProduct" class="btn-primary">Search</button>
+        </div>
+        <div class="link-card"><a href="../index.html">Return</a></div>
+        <div class="card">
+            <div class="card-title">Shopping Cart</div>
+            <table id="shoppingCart">
+                
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { ShoppingCart } from "./shopping-cart.js";
+        import { Product } from "./product.js";
+
+        const shoppingCart = new ShoppingCart();
+        setCartCount();
+
+        document.getElementById("btnAddProduct").onclick = function() {
+            console.dir('hi!');
+            const productList = document.getElementById("productList");
+            const product = productList.options[productList.selectedIndex].text;
+            const productValue = productList.options[productList.selectedIndex].value;
+
+            if (product !== "--Select--") {
+                shoppingCart.add(new Product(product, productValue));
+                setCartCount();
+                alert(`${product} was added to your shopping cart!`);
+                productList.value = "select";
+            }
+        }
+
+        document.getElementById("cartIcon").onclick = function() {
+            let cartDisplayTable = `
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            for (const cartItem of shoppingCart) {
+                cartDisplayTable += "<tr><td>" + cartItem.id + "</td><td>" + cartItem.name + "</td><td>" + cartItem.price + "</td></tr>";
+            }
+
+            cartDisplayTable += "</tbody>";
+            document.getElementById("shoppingCart").innerHTML = cartDisplayTable;
+        }
+
+        function setCartCount() {
+            document.getElementById("cart-count").innerHTML = shoppingCart.count();
+        }
+    </script>
+
+    <script>
+        /**
+         * Set light theme as default if theme is not found in localStorage
+         */
+        setDefaultTheme();
+
+        /**
+         * Function to switch the users selected website theme
+         * @param x (this instance)
+         */
+        function toggleMode(x)
+        {
+            let colorTheme = document.body.classList; // get the body's CSS class
+            let iconMode = x.classList; // get the current classes assigned to the triggered button
+
+            /**
+             * If the current body class is set to the light-theme, update the user's preference to the dark-theme in the browsers
+             * local storage.
+             */
+            if (colorTheme.value === "light-theme")
+            {
+                localStorage.clear();
+                localStorage.setItem("mode", "dark-theme");
+                localStorage.setItem("iconMode", "fa-toggle-on");
+                localStorage.setItem("iconText", "Dark Mode");
+            }
+            /**
+             * If the current body class is set to the dark-theme, update the user's preference to the light-theme in the browsers
+             * local storage.
+             */
+            else
+            {
+                localStorage.clear();
+                localStorage.setItem("mode", "light-theme");
+                localStorage.setItem("iconMode", "fa-toggle-off");
+                localStorage.setItem("iconText", "Light Mode");
+            }
+
+            /**
+             * Apply the updated selection to the HTML page elements
+             */
+            colorTheme.value = localStorage.getItem("mode");
+            iconMode.value = `fa ${localStorage.getItem("iconMode")} pull-right`;
+            document.getElementById("icon-text").innerHTML = localStorage.getItem("iconText");
+        }
+
+        /**
+         * Function to clear the browsers localStorage and set the default theme to light-theme.
+         * This function is for demonstration purposes only and does not need to be included in any of your solutions.
+         */
+        function clearLocalStorage() {
+            localStorage.clear();
+            document.body.classList.value = "light-theme";
+            document.getElementById("icon-text").innerHTML = "Light Mode";
+            document.getElementById("icon-mode").classList.value = "fa fa-toggle-off pull-right";
+        }
+    </script>
+</body>
+</html>
