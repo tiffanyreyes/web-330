@@ -1,0 +1,186 @@
+<!--========================== Exercise 6.2 - Future Value App ==========================
+An HTML and JavaScript project.
+
+Code referenced from w3schools 
+- https://www.w3schools.com/js/js_loop_forof.asp -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WEB 330 - Enterprise JavaScript II</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="../site.css" type="text/css" rel="stylesheet">
+    <link href="../theme.css" type="text/css" rel="stylesheet">
+    <link href="../flex-layout.css" type="text/css" rel="stylesheet">    
+    <link href="./reyes-future-value.css" type="text/css" rel="stylesheet">   
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <script src="../theme.js"></script>
+</head>
+<body class="light-theme">
+    <i onclick="toggleMode(this)" id="icon-mode" class="fa fa-toggle-off pull-right" style="font-size: 28px;">
+        <span id="icon-text"></span>
+    </i>
+    <div class="clearfix">&nbsp;</div>
+
+    <div class="container">
+        <h1 class="app-header">Welcome to the Future Value App!</h1>
+        <div class="card">
+            <div class="card-title">Future Value Calculator</div>
+            <div class="row col-12 danger" id="errorLog"></div>
+            <div class="card-content">
+                <div class="form-field row col-6">
+                    <label class="form-label col-5">Monthly Payment:</label>
+                    <input id="txtMonthlyPayment" class="form-field-input col-7" type="text">
+                </div>
+                <div class="form-field row col-6">
+                    <label class="form-label col-5">Interest Rate:</label>
+                    <input id="txtYearlyRate" class="form-field-input col-7" type="text">
+                </div>
+                <div class="col-5">
+                    <i class="danger">Enter 11% as 11.1:</i>
+                </div>
+                <div class="form-field row col-6">
+                    <label class="form-label col-5">Number of Years:</label>
+                    <select class="drop-down-menu col-7" name="types" id="listNumOfYears">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        
+                    </select>
+                </div>
+                <button id="btnCalculate" class="btn-primary">Calculate</button>
+            </div>
+        </div>
+        <div class="link-card"><a href="../index.html">Return</a></div>
+        <div class="card">
+            <div class="card-title">
+                Calculation as of <span id="today"></span>
+            </div>
+            <div class="card-content">
+                <div id="futureValue"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { Validator } from "./validator.js";
+        import { FinanceCalculator } from "./finance-calculator.js";
+
+        document.getElementById("today").innerHTML = new Date().toLocaleDateString("en-US");
+
+        document.getElementById("btnCalculate").onclick = function() {
+            const monthlyPayment = document.getElementById("txtMonthlyPayment").value;
+            const rate = document.getElementById("txtYearlyRate").value;
+            const years = document.getElementById("listNumOfYears").value;
+            const errorLogEl = document.getElementById("errorLog");
+            
+            const monthlyPaymentValidator = new Validator("Monthly Payment", monthlyPayment);
+            monthlyPaymentValidator.addRequiredField();
+            monthlyPaymentValidator.addRequiredFloatField();
+            monthlyPaymentValidator.addFloatMinField(100);
+
+            const rateValidator = new Validator("Interest Rate", rate);
+            rateValidator.addRequiredField();
+            rateValidator.addRequiredFloatField();
+            rateValidator.addFloatMaxField(100);
+
+            const errorLog = [];
+            
+            if (!monthlyPaymentValidator.validate()) {
+                for (const message of monthlyPaymentValidator.messages) {
+                    errorLog.push(message);
+                }
+            }
+
+            if (!rateValidator.validate()) {
+                for (const message of rateValidator.messages) {
+                    errorLog.push(message);
+                }
+            }
+
+            if (monthlyPaymentValidator.validate() && rateValidator.validate()) {
+                errorLogEl.innerHTML = "";
+                const futureValue = FinanceCalculator.calculateFutureValue(monthlyPayment, rate, years);
+                document.getElementById("futureValue").innerHTML = `The future value is $${futureValue}`;
+            }
+            else {
+                errorLogEl.innerHTML = "";
+                
+                let errorLogMessage = "<ul>";
+
+                for (const error of errorLog) {
+                    errorLogMessage += "<li>" + error + "</li>";
+                }
+
+                errorLogMessage += "</ul>";
+                errorLogEl.innerHTML = errorLogMessage;
+            }
+        }
+    </script>
+
+    <script>
+        /**
+         * Set light theme as default if theme is not found in localStorage
+         */
+        setDefaultTheme();
+
+        /**
+         * Function to switch the users selected website theme
+         * @param x (this instance)
+         */
+        function toggleMode(x)
+        {
+            let colorTheme = document.body.classList; // get the body's CSS class
+            let iconMode = x.classList; // get the current classes assigned to the triggered button
+
+            /**
+             * If the current body class is set to the light-theme, update the user's preference to the dark-theme in the browsers
+             * local storage.
+             */
+            if (colorTheme.value === "light-theme")
+            {
+                localStorage.clear();
+                localStorage.setItem("mode", "dark-theme");
+                localStorage.setItem("iconMode", "fa-toggle-on");
+                localStorage.setItem("iconText", "Dark Mode");
+            }
+            /**
+             * If the current body class is set to the dark-theme, update the user's preference to the light-theme in the browsers
+             * local storage.
+             */
+            else
+            {
+                localStorage.clear();
+                localStorage.setItem("mode", "light-theme");
+                localStorage.setItem("iconMode", "fa-toggle-off");
+                localStorage.setItem("iconText", "Light Mode");
+            }
+
+            /**
+             * Apply the updated selection to the HTML page elements
+             */
+            colorTheme.value = localStorage.getItem("mode");
+            iconMode.value = `fa ${localStorage.getItem("iconMode")} pull-right`;
+            document.getElementById("icon-text").innerHTML = localStorage.getItem("iconText");
+        }
+
+        /**
+         * Function to clear the browsers localStorage and set the default theme to light-theme.
+         * This function is for demonstration purposes only and does not need to be included in any of your solutions.
+         */
+        function clearLocalStorage() {
+            localStorage.clear();
+            document.body.classList.value = "light-theme";
+            document.getElementById("icon-text").innerHTML = "Light Mode";
+            document.getElementById("icon-mode").classList.value = "fa fa-toggle-off pull-right";
+        }
+    </script>
+</body>
+</html>
