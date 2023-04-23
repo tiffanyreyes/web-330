@@ -1,0 +1,19 @@
+.danger {
+    float: right;
+    color: #DF546A;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.form-label {
+    display: inline-block;
+}
+
+.form-field {
+    padding-top: 1rem;
+}
+
+#futureValue {
+    text-align: center;
+    font-size: 24px;
+}

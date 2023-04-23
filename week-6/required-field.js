@@ -5,11 +5,11 @@ export class RequiredField {
     }
 
     validate() {
-        return Boolean(this.field)
+        return Boolean(this.field);
     }
 
     getMessage() {
-        return "<name> is a required field."
+        return `${this.name} is a required field.`;
     }
 };
 
