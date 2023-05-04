@@ -1,0 +1,198 @@
+<!--========================== Exercise 8.2 - WhatABook App ==========================
+An HTML and JavaScript project.
+
+Code referenced from w3schools 
+- https://www.w3schools.com/xml/xml_elements.asp
+- https://www.w3schools.com/js/js_async.asp -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WEB 330 - Enterprise JavaScript II</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="../site.css" type="text/css" rel="stylesheet">
+    <link href="../theme.css" type="text/css" rel="stylesheet">   
+    <link href="../reyes-whatabook2.css" type="text/css" rel="stylesheet">  
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <script src="../theme.js"></script>
+    
+
+</head>
+<body class="light-theme">
+    <i onclick="toggleMode(this)" id="icon-mode" class="fa fa-toggle-off pull-right" style="font-size: 28px;">
+        <span id="icon-text"></span>
+    </i>
+    <div class="clearfix">&nbsp;</div>
+
+    <div class="container">
+        <h1 class="app-header">Welcome to the WhatABook, Part 1 App!</h1>
+        <div class="card">
+            <div class="card-title">Book Listing</div>
+            <div id="bookList" class="card-content">
+            </div>
+        </div>  
+    </div>
+    <div class="link-card"><a href="../index.html">Return</a></div>
+    <div class="card">
+        <div class="card-title">Selected Book</div>
+        <div class="card-content" id="selectedBook"></div>
+    </div>
+
+    <script type="module">
+        import { HttpClient } from "./http-client.js";
+
+        const http = new HttpClient();
+
+        const isbns = [
+            '0345339681',
+            '0261103571',
+            '9780593099322',
+            '9780261102361',
+            '9780261102378',
+            '9780590302715',
+            '9780316769532',
+            '9780743273565',
+            '9780590405959'
+        ]
+
+        const params = {
+            "bibkeys": `ISBN:${isbns.join(",")}`,
+            "format": "json",
+            "jscmd": "details"
+        };
+
+        http.get("https://openlibrary.org/api/books", params).then(res => {
+            console.log(res);
+
+            document.getElementById("bookListing").innerHTML = buildHTMLString(res, "table");
+
+            addIsbnClickEvents();
+        })
+        .catch(e => {
+            console.log(e);
+        });
+
+        function getBook(e) {
+            e.preventDefault();
+            let self = this;
+            let isbn = self.innerText;
+
+            const params = {
+                "bibkeys": `ISBN:${isbns.join(",")}`,
+                "format": "json",
+                "jscmd": "details"
+            };
+
+            http.get("https://openlibrary.org/api/books", params).then(res => {
+                console.log(res);
+
+                document.getElementById("selectedBook").innerHTML = buildHTMLString(res, "ul");
+
+                addIsbnClickEvents();
+            })
+            .catch(e => {
+                console.log(e);
+            });
+        }
+
+        function buildHTMLString(res, format) {
+            let tableString = `
+                <table id="bookTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>ISBN</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Pages</th>
+                            <th>Authors</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            let ulString = "";
+            for (let key in res) {
+                ulString += `<ul style="list-style-type: none;">`;
+
+                    if (res.hasOwnProperty(key)) {
+                        let authors = [];
+                        if (res[key].details.authors) {
+                            authors = res[key].details.authors.map(function(author){
+                                return author.name;
+                            });
+                        }
+
+                        let book = {
+                            isbn: res[key].details.isbn_13 ? res[key].details.isbn_13 : res[key].details.isbn_10,
+                            title: res[key].details.title,
+                            description: res[key].details.subtitle ? res[key].details.subtitle : "N/A",
+                            pages: res[key].details.number_of_pages ? res[key].details.number_of_pages : "N/A",
+                            authors: authors.join(",")
+                        };
+
+                        ulString += `<li><b>ISBN:</b> ${book.isbn}</li><li><b>Title:</b> ${book.title}</li><li><b>Description:</b> ${book.description}</li><li><b>Pages:</b> ${book.pages}</li><li><b>Authors:</b> ${book.authors}</li>`;
+
+                        tableString += `<tr><td><a href="#" class="isbn-link">${book.isbn}</a></td><td>${book.title}</td><td>${book.description}</td><td>${book.pages}</td><td>${book.authors}</td></tr>`;
+                    }
+        }}
+       
+    </script>
+
+    <script>
+        /**
+         * Set light theme as default if theme is not found in localStorage
+         */
+        setDefaultTheme();
+
+        /**
+         * Function to switch the users selected website theme
+         * @param x (this instance)
+         */
+        function toggleMode(x)
+        {
+            let colorTheme = document.body.classList; // get the body's CSS class
+            let iconMode = x.classList; // get the current classes assigned to the triggered button
+
+            /**
+             * If the current body class is set to the light-theme, update the user's preference to the dark-theme in the browsers
+             * local storage.
+             */
+            if (colorTheme.value === "light-theme")
+            {
+                localStorage.clear();
+                localStorage.setItem("mode", "dark-theme");
+                localStorage.setItem("iconMode", "fa-toggle-on");
+                localStorage.setItem("iconText", "Dark Mode");
+            }
+            /**
+             * If the current body class is set to the dark-theme, update the user's preference to the light-theme in the browsers
+             * local storage.
+             */
+            else
+            {
+                localStorage.clear();
+                localStorage.setItem("mode", "light-theme");
+                localStorage.setItem("iconMode", "fa-toggle-off");
+                localStorage.setItem("iconText", "Light Mode");
+            }
+
+            /**
+             * Apply the updated selection to the HTML page elements
+             */
+            colorTheme.value = localStorage.getItem("mode");
+            iconMode.value = `fa ${localStorage.getItem("iconMode")} pull-right`;
+            document.getElementById("icon-text").innerHTML = localStorage.getItem("iconText");
+        }
+
+        /**
+         * Function to clear the browsers localStorage and set the default theme to light-theme.
+         * This function is for demonstration purposes only and does not need to be included in any of your solutions.
+         */
+        function clearLocalStorage() {
+            localStorage.clear();
+            document.body.classList.value = "light-theme";
+            document.getElementById("icon-text").innerHTML = "Light Mode";
+            document.getElementById("icon-mode").classList.value = "fa fa-toggle-off pull-right";
+        }
+    </script>
+</body>
+</html>                       
