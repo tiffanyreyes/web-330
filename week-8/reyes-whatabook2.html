@@ -11,7 +11,7 @@ Code referenced from w3schools
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="../site.css" type="text/css" rel="stylesheet">
     <link href="../theme.css" type="text/css" rel="stylesheet">   
-    <link href="../reyes-whatabook2.css" type="text/css" rel="stylesheet">  
+    <link href="./reyes-whatabook2.css" type="text/css" rel="stylesheet">  
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <script src="../theme.js"></script>
@@ -25,7 +25,7 @@ Code referenced from w3schools
     <div class="clearfix">&nbsp;</div>
 
     <div class="container">
-        <h1 class="app-header">Welcome to the WhatABook, Part 1 App!</h1>
+        <h1 class="app-header">Welcome to the WhatABook, Part 2 App!</h1>
         <div class="card">
             <div class="card-title">Book Listing</div>
             <div id="bookList" class="card-content">
@@ -64,7 +64,7 @@ Code referenced from w3schools
         http.get("https://openlibrary.org/api/books", params).then(res => {
             console.log(res);
 
-            document.getElementById("bookListing").innerHTML = buildHTMLString(res, "table");
+            document.getElementById("bookList").innerHTML = buildHTMLString(res, "table");
 
             addIsbnClickEvents();
         })
@@ -78,7 +78,7 @@ Code referenced from w3schools
             let isbn = self.innerText;
 
             const params = {
-                "bibkeys": `ISBN:${isbns.join(",")}`,
+                "bibkeys": `ISBN:${isbn}`,
                 "format": "json",
                 "jscmd": "details"
             };
@@ -133,8 +133,25 @@ Code referenced from w3schools
 
                         tableString += `<tr><td><a href="#" class="isbn-link">${book.isbn}</a></td><td>${book.title}</td><td>${book.description}</td><td>${book.pages}</td><td>${book.authors}</td></tr>`;
                     }
-        }}
-       
+            }
+
+            tableString += "</tbody></table>";
+            ulString += "</ul>";
+
+            if (format === "table") {
+                return tableString;
+            }
+
+            return ulString;
+        }
+
+        function addIsbnClickEvents() {
+            const viewButtons = document.querySelectorAll("#bookTable tbody .isbn-link")
+
+            for (let index = 0; index < viewButtons.length; index++) {
+                viewButtons[index].addEventListener("click", getBook);
+            }
+        }
     </script>
 
     <script>
